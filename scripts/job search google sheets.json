@@ -1,0 +1,414 @@
+{
+  "name": "job search google sheets",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -860,
+        -360
+      ],
+      "id": "bef81ed5-7188-498d-bd9c-8eba9fe59107",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://jsearch.p.rapidapi.com/search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "NodeJS Developer"
+            },
+            {
+              "name": "page",
+              "value": "1"
+            },
+            {
+              "name": "num_pages",
+              "value": "10"
+            },
+            {
+              "name": "country",
+              "value": "brazil"
+            },
+            {
+              "name": "date_posted",
+              "value": "all"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-rapidapi-host",
+              "value": "jsearch.p.rapidapi.com"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -580,
+        -360
+      ],
+      "id": "c533fca6-ebd9-46c6-a2d0-3a0ab4188f3a",
+      "name": "HTTP Request1",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "hFNEek2vgXgdOvxW",
+          "name": "RapidApi Headers Auth"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -360,
+        -360
+      ],
+      "id": "89aace72-dc61-4b6b-8c11-6ee74fd63f4e",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "13cc64c4-4e3d-4985-aa20-a78fbf1d20f2",
+              "leftValue": "={{ $json.job_is_remote }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -160,
+        -380
+      ],
+      "id": "b20a6dfd-60a5-460f-a3e3-c57022c69d6b",
+      "name": "If remote"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2a0e3f12-5d0b-4286-b85b-ae9cf495acaa",
+              "name": "job_id",
+              "value": "={{ $json.job_id }}",
+              "type": "string"
+            },
+            {
+              "id": "f0df0d87-35b1-4e13-84aa-2ed6e304c356",
+              "name": "job_title",
+              "value": "={{ $json.job_title }}",
+              "type": "string"
+            },
+            {
+              "id": "336c9e3d-fe4a-4526-8224-2fdafe6ade99",
+              "name": "employer_name",
+              "value": "={{ $json.employer_name }}",
+              "type": "string"
+            },
+            {
+              "id": "8ce4a6cd-4c97-42ef-91d9-d8d495c6012c",
+              "name": "job_employment_type",
+              "value": "={{ $json.job_employment_type }}",
+              "type": "string"
+            },
+            {
+              "id": "5a3520b6-71b8-4245-acef-aa2306eaed6a",
+              "name": "job_apply_link",
+              "value": "={{ $json.job_apply_link }}",
+              "type": "string"
+            },
+            {
+              "id": "ff1fc332-4a2d-4fda-b85f-64bcd75445e1",
+              "name": "job_posted_at",
+              "value": "={{ $json.job_posted_at_datetime_utc }}",
+              "type": "string"
+            },
+            {
+              "id": "16b42f4a-1882-4cab-a142-14ab4402a2d8",
+              "name": "job_location",
+              "value": "={{ $json.job_location }}",
+              "type": "string"
+            },
+            {
+              "id": "5e43b60e-29c8-47dc-b8d5-51f27c6335b7",
+              "name": "job_country",
+              "value": "={{ $json.job_country }}",
+              "type": "string"
+            },
+            {
+              "id": "9b9855ee-03e9-418e-9151-7088b6583dde",
+              "name": "job_min_salary",
+              "value": "={{ $json.job_min_salary }}",
+              "type": "number"
+            },
+            {
+              "id": "cab1761d-9d02-4ae4-be3c-2ffb2fd035e7",
+              "name": "job_max_salary",
+              "value": "={{ $json.job_max_salary }}",
+              "type": "number"
+            },
+            {
+              "id": "ca98bc67-a45a-4530-9ea8-4171b4daf4e1",
+              "name": "job_salary_period",
+              "value": "={{ $json.job_salary_period }}",
+              "type": "string"
+            },
+            {
+              "id": "62020afb-89cf-4e1c-bb17-ab6172b29d0a",
+              "name": "job_highlights",
+              "value": "={{ $json.job_highlights }}",
+              "type": "object"
+            },
+            {
+              "id": "50381075-a428-497d-8cc3-40fe1a3c0482",
+              "name": "job_highlights.Benefits",
+              "value": "={{ $json.job_highlights.Benefits }}",
+              "type": "string"
+            },
+            {
+              "id": "c1eeaedf-eb4a-4de3-a4b6-573a248c0e84",
+              "name": "job_highlights.Responsibilities",
+              "value": "={{ $json.job_highlights.Responsibilities }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        160,
+        -400
+      ],
+      "id": "fe45ba7b-c105-44e7-b6fc-d3af6d1c5e53",
+      "name": "Build DB object"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "job_id",
+        "joinMode": "keepNonMatches",
+        "outputDataFrom": "input1",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        440,
+        -380
+      ],
+      "id": "b97cf2c9-5147-466e-a6ea-3b76bd8f5b83",
+      "name": "Filter Only new Jobs"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1_FDlCzcFCa4n9D99Gw3DTqf4FTT8xfAkbWL2AQISTfk",
+          "mode": "list",
+          "cachedResultName": "Jobs Search Table",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_FDlCzcFCa4n9D99Gw3DTqf4FTT8xfAkbWL2AQISTfk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_FDlCzcFCa4n9D99Gw3DTqf4FTT8xfAkbWL2AQISTfk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        660,
+        -380
+      ],
+      "id": "352fcd0e-efb2-4169-916f-6ddece272c60",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "XLGJCZybmAIQ1LJK",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1_FDlCzcFCa4n9D99Gw3DTqf4FTT8xfAkbWL2AQISTfk",
+          "mode": "list",
+          "cachedResultName": "Jobs Search Table",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_FDlCzcFCa4n9D99Gw3DTqf4FTT8xfAkbWL2AQISTfk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_FDlCzcFCa4n9D99Gw3DTqf4FTT8xfAkbWL2AQISTfk/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        160,
+        -180
+      ],
+      "id": "b2e1d061-776b-439e-b263-b94e2d98b2b6",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "XLGJCZybmAIQ1LJK",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "If remote",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If remote": {
+      "main": [
+        [
+          {
+            "node": "Build DB object",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build DB object": {
+      "main": [
+        [
+          {
+            "node": "Filter Only new Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Only new Jobs": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        []
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Filter Only new Jobs",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "5f29ebcf-dfb3-4aec-bf72-55d333871ed3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e9c4eaeccc0f3217b5e16e26db02224cc7c34bad3a8950d1912d53efc97ba349"
+  },
+  "id": "tLuFXdmqbv0HwLcn",
+  "tags": []
+}
